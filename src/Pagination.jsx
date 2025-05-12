@@ -6,15 +6,23 @@ const PaginationExample = () => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [value, setValue] = useState("");
+  const [category, setCategory] = useState("all");
   const itemsPerPage = 8;
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await axios.get(
-        "https://www.course-api.com/react-store-products"
-      );
-      setData(data.data);
-      console.log(data.data);
+      setLoading(true);
+      try {
+        const data = await axios.get(
+          "https://www.course-api.com/react-store-products/"
+        );
+        setData(data.data);
+        console.log(data.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -23,9 +31,13 @@ const PaginationExample = () => {
     setCurrentPage(1);
   }, [value]);
 
-  const filteredData = data.filter((item) =>
-    item.name.toLowerCase().includes(value.toLowerCase())
-  );
+  const filteredData = data.filter((item) => {
+    const sortedItem = category === "all" || item.category === category;
+    const searchedItem = item.name.toLowerCase().includes(value.toLowerCase());
+    return sortedItem && searchedItem;
+  });
+
+  if (loading) return <h1 className="text-2xl">Loading...</h1>;
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
@@ -37,8 +49,9 @@ const PaginationExample = () => {
 
   return (
     <div className="p-4">
-      <Header setValue={setValue} />
-      <div className="mb-4 flex flex-wrap gap-4 justify-center">
+      <Header setValue={setValue} setCategory={setCategory} />
+      {/* <Nav /> */}
+      <div className="mb-4 justify-between grid grid-cols-4 gap-4">
         {currentItems?.map((item) => (
           <div key={item.id} className="border p-2 mb-1 rounded">
             <img
