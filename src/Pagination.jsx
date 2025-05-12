@@ -31,6 +31,10 @@ const PaginationExample = () => {
     setCurrentPage(1);
   }, [value]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category]);
+
   const filteredData = data.filter((item) => {
     const sortedItem = category === "all" || item.category === category;
     const searchedItem = item.name.toLowerCase().includes(value.toLowerCase());
@@ -54,11 +58,7 @@ const PaginationExample = () => {
       <div className="mb-4 justify-between grid grid-cols-4 gap-4">
         {currentItems?.map((item) => (
           <div key={item.id} className="border p-2 mb-1 rounded">
-            <img
-              className="w-[300px] h-[300px] rounded"
-              src={item.image}
-              alt=""
-            />
+            <img className="w-full h-[300px] rounded" src={item.image} alt="" />
             <h1 className="text-2xl font-bold">
               {item.name?.charAt(0).toUpperCase() +
                 item.name?.slice(1).toLowerCase()}
@@ -68,12 +68,12 @@ const PaginationExample = () => {
         ))}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 justify-center">
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i + 1}
             onClick={() => handleClick(i + 1)}
-            className={`px-4 py-2 rounded ${
+            className={`px-4 py-2 rounded cursor-pointer ${
               currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
             }`}
           >

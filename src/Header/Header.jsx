@@ -6,7 +6,7 @@ const Header = ({ setValue, setCategory }) => {
       <input
         onChange={(e) => setValue(e.target.value)}
         type="text"
-        className="border mb-5 p-2 rounded"
+        className="border mb-3 p-2 rounded"
         placeholder="Search..."
       />
       <select
